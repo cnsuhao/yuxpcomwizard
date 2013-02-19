@@ -1,0 +1,10 @@
+
+
+<Job ID="Delete the template File">
+<script language="JSCript" src="setup10plugin.js" />
+
+<script LANGUAGE="JSCript">
+	setupPlugin();
+</script>
+
+</Job>

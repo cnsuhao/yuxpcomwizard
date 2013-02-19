@@ -1,0 +1,20 @@
+#include "nsISupports.idl"
+
+
+
+ [scriptable, uuid(2846DA33-6DA0-42AD-848D-EB8213234E0E)]
+ interface IYuAccess : nsISupports
+ {
+	 /**
+		proxy's type.
+			- 0 Direct
+			- 1 Manual
+	 */
+	 attribute boolean proxyType;
+	 attribute AString proxyHttp;
+	 attribute long proxyHttpPort;
+	 attribute AString proxySSL;
+	 attribute long proxySSLPort;
+
+     long Sum(in long aFirst, in long aSecond);
+ };

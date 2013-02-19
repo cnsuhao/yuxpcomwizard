@@ -1,0 +1,15 @@
+/*! @defgroup [!output SAFE_PROJECT_NAME]Group [!output SAFE_PROJECT_NAME]插件
+*  本组为[!output SAFE_PROJECT_NAME]系统
+*  \ingroup PluginGroup
+*  @{
+*/
+/*! @} */
+
+/*! @defgroup [!output SAFE_PROJECT_NAME]Interface [!output SAFE_PROJECT_NAME]插件接口
+*  本组为[!output SAFE_PROJECT_NAME]系统的接口
+*  \ingroup [!output SAFE_PROJECT_NAME]Group
+*  @{
+*/
+/*! @} */
+
+
