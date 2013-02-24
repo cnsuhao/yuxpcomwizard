@@ -1,9 +1,8 @@
 #include "nsISupports.idl"
 
 
-
- [scriptable, uuid(2846DA33-6DA0-42AD-848D-EB8213234E0E)]
- interface IYuAccess : nsISupports
+ [scriptable, uuid([!output YU_INTERFACE_ID0])]
+ interface [!output YU_INTERFACE_NAME] : nsISupports
  {
 	 /**
 		proxy's type.

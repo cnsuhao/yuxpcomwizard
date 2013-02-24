@@ -178,13 +178,20 @@
 														<SPAN CLASS="itemText"><H4 CLASS="subhead">Component Setting </H4><HR/>
 															<P CLASS="Spacer">&nbsp;</P>
 															<DIV ID="WX_USE_AUTOBUILDNUMBER_DIV">
-																<LABEL FOR="YUXPCOM_COMP_NAME" TITLE="Set Component's name." ID="YUXPCOM_COMP_NAME_LABEL">
+																<LABEL FOR="YU_COMP_NAME" TITLE="Set Component's name." ID="YU_COMP_NAME_LABEL">
 																	Component Name:</LABEL>
-																<INPUT TYPE="text" ID="YUXPCOM_COMP_NAME" TITLE="Component Name"
-																value=yuAccessComponent NAME="YUXPCOM_COMP_NAME"/>	
+																<INPUT TYPE="text" ID="YU_COMP_NAME" TITLE="Component Name"
+																value="yuAccessComponent" NAME="YU_COMP_NAME"/>	
 															</DIV>
 															<BR>
 															
+															<DIV ID="WX_USE_AUTOBUILDNUMBER_DIV">
+																<LABEL FOR="YU_COMP_CONTRACTID" TITLE="Set Component's contact id." ID="YU_COMP_CONTRACTID_LABEL">
+																	Component Contract ID:</LABEL>
+																<INPUT TYPE="text" ID="YU_COMP_CONTRACTID"
+																value="@yutools.com/yuIAccess;1" NAME="YU_COMP_CONTRACTID"/>	
+															</DIV>
+															<BR>
 															
 															<INPUT CLASS="CheckBoxA" TYPE="checkbox" ID="GRS_USE_TOOLBAR" ACCESSKEY="I" TITLE="使用XML工具栏。"
 																value="ON" NAME="GRS_USE_TOOLBAR" />
@@ -345,7 +352,11 @@ function OnInit()
 
 	YU_INTERFACE_NAME.value = "yuIAccess";
 	YU_INTERFACE_NAME.disabled = false;
-	YUXPCOM_COMP_NAME.value = "yuAccessModule";
+	
+	var compName = "yuAccess"
+	YU_COMP_NAME.value = compName;
+	window.external.AddSymbol("YU_COMP_NAME_UPCASE", compName.toUpperCase() );
+	YU_COMP_CONTRACTID.value = "\"@yutools.com/yuIAccess;1\"";
 }
 		</SCRIPT>
 		<SCRIPT ID="INCLUDE_SCRIPT" LANGUAGE="JSCRIPT"></SCRIPT>

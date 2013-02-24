@@ -4,7 +4,7 @@
 #include "yuaccess.h"
 
 
-nsresult [!output SAFE_PROJECT_NAME]LoadFuncPtr()
+nsresult [!output YU_COMP_NAME]LoadFuncPtr()
 {
 	nsCOMPtr<nsIServiceManager> servMan;
 
@@ -26,41 +26,40 @@ nsresult [!output SAFE_PROJECT_NAME]LoadFuncPtr()
 	return NS_OK;
 }
 
-void [!output SAFE_PROJECT_NAME]UnloadFuncPtr()
+void [!output YU_COMP_NAME]UnloadFuncPtr()
 {
 
 }
 
-
 //////////////////////////////////////////////////////////////////////////
-NS_GENERIC_FACTORY_CONSTRUCTOR( [!output SAFE_PROJECT_NAME]Component )
+NS_GENERIC_FACTORY_CONSTRUCTOR( [!output YU_COMP_NAME]Component )
 
-NS_DEFINE_NAMED_CID(YUACCESS_COMPONENTS_CID);
+NS_DEFINE_NAMED_CID([!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID);
 
-static const mozilla::Module::CIDEntry kYuAccessComCIDs[] = {
-	{ &kYUACCESS_COMPONENTS_CID, false, NULL, [!output SAFE_PROJECT_NAME]Constructor },
+static const mozilla::Module::CIDEntry k[!output YU_COMP_NAME]ComCIDs[] = {
+	{ &k[!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID, false, NULL, [!output YU_COMP_NAME]Constructor },
 	{ NULL }
 };
 
-static const mozilla::Module::ContractIDEntry kYuAccessContracts[] = {
-	{ YUACCESS_COMPONENTS_CONTRACTID, &kYUACCESS_COMPONENTS_CID },
+static const mozilla::Module::ContractIDEntry k[!output YU_COMP_NAME]Contracts[] = {
+	{ [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID, &k[!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID },
 	{ NULL }
 };
 
-static const mozilla::Module::CategoryEntry kYuAccessCategories[] = {
-	{"yuaccess-category", "yuaccess-key", YUACCESS_COMPONENTS_CONTRACTID },
+static const mozilla::Module::CategoryEntry k[!output YU_COMP_NAME]Categories[] = {
+	{"yuaccess-category", "yuaccess-key", [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID },
 	{ NULL }
 };
 
-static const mozilla::Module kYuAccessModule = {
+static const mozilla::Module k[!output YU_COMP_NAME]Module = {
 	mozilla::Module::kVersion,
-	kYuAccessComCIDs,
-	kYuAccessContracts,
-	kYuAccessCategories,
+	k[!output YU_COMP_NAME]ComCIDs,
+	k[!output YU_COMP_NAME]Contracts,
+	k[!output YU_COMP_NAME]Categories,
 	NULL,
-	yuAccessLoadFuncPtr,
-	yuAccessUnloadFuncPtr
+	[!output YU_COMP_NAME]LoadFuncPtr,
+	[!output YU_COMP_NAME]UnloadFuncPtr
 };
 
-NSMODULE_DEFN( nsYuAccessModule ) = &kYuAccessModule;
-NS_IMPL_MOZILLA192_NSGETMODULE(&kYuAccessModule)
+NSMODULE_DEFN( ns[!output YU_COMP_NAME]Module ) = &k[!output YU_COMP_NAME]Module;
+NS_IMPL_MOZILLA192_NSGETMODULE(&k[!output YU_COMP_NAME]Module)

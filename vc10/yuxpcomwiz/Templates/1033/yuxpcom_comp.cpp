@@ -45,20 +45,20 @@ void popMessage( const nsAString::char_type *msg)
 }
 
 
-NS_IMPL_ISUPPORTS2( YuAccessComponent, IYuAccess, nsIObserver)
+NS_IMPL_ISUPPORTS2( [!output YU_COMP_NAME]Component, [!output YU_INTERFACE_NAME], nsIObserver)
 
-YuAccessComponent::YuAccessComponent()
+[!output YU_COMP_NAME]Component::[!output YU_COMP_NAME]Component()
 {
 
 
 }
 
-YuAccessComponent::~YuAccessComponent()
+[!output YU_COMP_NAME]Component::~[!output YU_COMP_NAME]Component()
 {
 
 }
 
-NS_IMETHODIMP YuAccessComponent::HandleEvent(nsIDOMEvent *aEvent)
+NS_IMETHODIMP [!output YU_COMP_NAME]Component::HandleEvent(nsIDOMEvent *aEvent)
 {
 	nsAString &type = EmptyString();
 	if (!aEvent) 
@@ -93,7 +93,7 @@ NS_IMETHODIMP YuAccessComponent::HandleEvent(nsIDOMEvent *aEvent)
 	return NS_OK;
 }
 
-NS_IMETHODIMP YuAccessComponent::Sum(PRInt32 aFirst, PRInt32 aSecond, PRInt32 *_retval )
+NS_IMETHODIMP [!output YU_COMP_NAME]Component::Sum(PRInt32 aFirst, PRInt32 aSecond, PRInt32 *_retval )
 {
 	*_retval = aFirst + aSecond;
 	//////
@@ -131,7 +131,7 @@ NS_IMETHODIMP YuAccessComponent::Sum(PRInt32 aFirst, PRInt32 aSecond, PRInt32 *_
 	return NS_OK;
 }
 
-NS_IMETHODIMP YuAccessComponent::Observe(nsISupports *aSubject, const char * aTopic, const PRUnichar * aData)
+NS_IMETHODIMP [!output YU_COMP_NAME]Component::Observe(nsISupports *aSubject, const char * aTopic, const PRUnichar * aData)
 {
 	nsresult rv = NS_OK;
 

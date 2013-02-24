@@ -410,11 +410,18 @@ function AddGUID()
 	
 	wizard.AddSymbol( "GRS_GUID_PLUGIN", CreateGUID()[0] );
 	
-	if(wizard.FindSymbol('YUXPCOM_USE_INTERFACE'))
+	if(wizard.FindSymbol('YU_USE_INTERFACE'))
 	{	
-		wizard.AddSymbol( "YU_GUID_INTERFACE", CreateGUID()[1] );	
+		var interID = CreateGUID();
+		wizard.AddSymbol( "YU_INTERFACE_ID0", interID[1] );	
+		wizard.AddSymbol( "YU_INTERFACE_ID1", interID[0] );	
 	}
 	
+	var compName = wizard.FIndSymbol('YU_COMP_NAME_UPCASE');
+	if( compName ) {
+		wizard.AddSymbol( "YU_COMP_NAME_UPCASE", compName.toUpperCase() );	
+	}
+
 	if(wizard.FindSymbol('GRS_USE_TOOLBAR'))
 	{
 		wizard.AddSymbol( "GRS_GUID_TOOLBAR", CreateGUID() );
