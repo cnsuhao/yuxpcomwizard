@@ -1,4 +1,5 @@
 
+gentypedef.bat
 yuxpcom_comp.h
 yuxpcom_comp.cpp
 yuxpcom_module.cpp

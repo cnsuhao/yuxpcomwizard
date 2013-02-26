@@ -1,7 +1,7 @@
 
 #include "mozilla/ModuleUtils.h"
 #include "nsIClassInfoImpl.h"
-#include "yuaccess.h"
+#include "[!output YU_COMP_NAME]_comp.h"
 
 
 nsresult [!output YU_COMP_NAME]LoadFuncPtr()

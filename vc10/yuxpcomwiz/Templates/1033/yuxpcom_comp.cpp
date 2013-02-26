@@ -4,7 +4,7 @@ using namespace std;
 
 
 /* yuaccess.cpp*/
-#include "yuaccess.h"
+#include "[!output YU_COMP_NAME]_comp.h"
 
 #define MOZILLA_STRICT_API
 

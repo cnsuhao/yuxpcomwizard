@@ -6,8 +6,17 @@ function OnFinish(selProj, selObj)
 	    //wizard.AddSymbol( "GRS_GUID_PLUGIN", CreateGUID() );
 	
         //////////////////////////////////////////////////////////////////////////
-		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
+		var strSolutionName = "";
+		var strProjectPath = "";
+		
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
+		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
+		strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
+		if (strSolutionName.length)
+		{
+			var strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
+			strProjectPath = strSolutionPath + "src\\" + strProjectName;
+		}
 
 		//selProj = CreateCustomProject(strProjectName, strProjectPath);
 		selProj = CreateProject(strProjectName, strProjectPath);
@@ -61,7 +70,6 @@ function CreateCustomProject(strProjectName, strProjectPath)
 		var oTarget = wizard.FindSymbol("TARGET");
 		var prj;
 		
-		//echo("12");
 		//if (wizard.FindSymbol("WIZARD_TYPE") == vsWizardAddSubProject)  // vsWizardAddSubProject
 		//{
 			//echo("12");
@@ -98,6 +106,17 @@ function AddFilters(proj)
 		group = proj.Object.AddFilter('Resource Files');
 		group.Filter = strSrcFilter;
 		
+		if( wizard.FindSymbol('YU_USE_INTERFACE') )
+		{
+			strSrcFilter = wizard.FindSymbol('INTERFACE_FILTER');
+			group = proj.Object.AddFilter('Interface Files');
+			group.Filter = strSrcFilter;
+			
+			strSrcFilter = wizard.FindSymbol('TOOLS_FILTER');
+			group = proj.Object.AddFilter('Tools Files');
+			group.Filter = strSrcFilter;			
+		}
+		
 	}
 	catch(e)
 	{
@@ -131,7 +150,7 @@ function AddConfig(proj, strProjectName)
 				config.ATLMinimizesCRunTimeLibraryUsage = true;
 			}
 			
-			config.IntermediateDirectory = "$(ConfigurationName)\\";
+			config.IntermediateDirectory = "$(Configuration)\\";
 			config.OutputDirectory = "./bin/components/";
 			config.CharacterSet = charSetUnicode;
 			config.ConfigurationType  = typeDynamicLibrary;
@@ -231,7 +250,7 @@ function AddConfig(proj, strProjectName)
 			// Resource settings
 			var RCTool = config.Tools("VCResourceCompilerTool");
 			RCTool.Culture = rcEnglishUS;
-			RCTool.AdditionalIncludeDirectories = "$(IntDir); $(WXWIN)/include";
+			RCTool.AdditionalIncludeDirectories = "$(IntDir)";
 			if(bDebug)
 				RCTool.PreprocessorDefinitions = "_DEBUG";
 			else
@@ -241,15 +260,13 @@ function AddConfig(proj, strProjectName)
 			if(!bDebug)
 			{
 				//var PreBuildTool = config.Tools("VCPreBuildEventTool");
-				//PreBuildTool.Description = "‘ˆº”±‡“Î∞Ê±æ∫≈ . . .";
-				//if ( wizard.FindSymbol('WX_USE_VERSION_RC'))
+				//PreBuildTool.Description = "Buils idl file . . .";
+				//if ( wizard.FindSymbol('YU_USE_INTERFACE'))
 				//{
+				//	gentypedef.bat
 				//	var name = wizard.FindSymbol('PROJECT_NAME');
-				//	PreBuildTool.CommandLine = "AutoBuildNumber.exe \"$(ProjectDir)/" + name + ".rc\""
-				//}
-				//else
-				//{
-				//	PreBuildTool.CommandLine = "ChangeRev.exe /s\"$(ProjectDir).svn\\entries\" /f\"$(ProjectDir)version.cpp\""
+					//PreBuildTool.CommandLine = "AutoBuildNumber.exe \"$(ProjectDir)/" + name + ".rc\""
+				//	PreBuildTool.CommandLine = "$(ProjectDir)/interface/gentypedef.bat"
 				//}
 			}
 		}
@@ -308,8 +325,13 @@ function GetTargetName(strName, strProjectName)
 	{
 		var strTarget = strName;
 		var strResPath = "res\\";
+		var strIPath = "interface\\";
 		
-		if(strName.substr(0, 4) == "root")
+		if( strName == "yuxpcom_I.idl" ) {
+			var strInterfaceName = wizard.FindSymbol('YU_COMP_NAME');
+			strTarget = strIPath + strInterfaceName + ".idl";
+		}
+		else if(strName.substr(0, 4) == "root")
 		{
 			var nNameLen = strName.length;
 			if(strName == "root.ico" || strName == "root.exe.Manifest")
@@ -324,13 +346,13 @@ function GetTargetName(strName, strProjectName)
 		else if(strName.substr(0, 4) == "safe")
 		{
 			var nNameLen = strName.length;
-			var strSafeProjectName = wizard.FindSymbol('SAFE_PROJECT_NAME');
+			var strSafeProjectName = wizard.FindSymbol('YU_COMP_NAME');
 			strTarget = strSafeProjectName + strName.substr(4, nNameLen - 4);
 		}
 		else if(strName.substr(0, 7) == "yuxpcom" )
 		{
 			var nNameLen = strName.length;
-			var strSafeProjectName = wizard.FindSymbol('SAFE_PROJECT_NAME');
+			var strSafeProjectName = wizard.FindSymbol('YU_COMP_NAME');
 			strTarget = strSafeProjectName + strName.substr(7, nNameLen - 7);
 		}
 
@@ -346,15 +368,6 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 {
 	try
 	{	
-		// add Interface Filter
-		var grsIFilter;
-		//if(wizard.FindSymbol('GRS_USE_INTERFACE'))
-		{
-			strSrcFilter = wizard.FindSymbol('INTERFACE_FILTER');
-			grsIFilter = proj.Object.AddFilter('Interface Files');
-			grsIFilter.Filter = strSrcFilter;
-		}
-		
 		var projItems = proj.ProjectItems
 
 		var strTemplatePath = wizard.FindSymbol('TEMPLATES_PATH');
@@ -387,7 +400,7 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 					//if(wizard.FindSymbol('GRS_USE_INTERFACE'))
 					{
 						// Add Files to GRS Interface Filter
-						grsIFilter.AddFile(strFile);
+						//grsIFilter.AddFile(strFile);
 					}						
 				}
 				else
