@@ -11,13 +11,23 @@ function OnFinish(selProj, selObj)
 		
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
 		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
+		var oldProjFolder = strProjectPath;
+		var strSolutionPath = "";
+		
 		strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
 		if (strSolutionName.length)
 		{
-			var strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
+			strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
 			strProjectPath = strSolutionPath + "src\\" + strProjectName;
 		}
+		
+		wizard.AddSymbol( "YU_DIR_BIN", strSolutionPath + "bin\\" );	
+		wizard.AddSymbol( "YU_DIR_DOC", strSolutionPath + "doc\\" );
+		wizard.AddSymbol( "YU_DIR_SRC_INC", strSolutionPath + "src\\include\\" );
+		wizard.AddSymbol( "YU_DIR_SRC_INT", strSolutionPath + "src\\interface\\" );
+		
 
+		///////////////
 		//selProj = CreateCustomProject(strProjectName, strProjectPath);
 		selProj = CreateProject(strProjectName, strProjectPath);
 		selProj.Object.Keyword = "xpcomWizProj";
@@ -34,6 +44,9 @@ function OnFinish(selProj, selObj)
 		InfFile.Delete();
 
 		selProj.Object.Save();
+		
+		//DeleteFile(fso, oldProjFolder);
+		
 	}
 	catch(e)
 	{
@@ -325,11 +338,13 @@ function GetTargetName(strName, strProjectName)
 	{
 		var strTarget = strName;
 		var strResPath = "res\\";
-		var strIPath = "interface\\";
 		
 		if( strName == "yuxpcom_I.idl" ) {
-			var strInterfaceName = wizard.FindSymbol('YU_COMP_NAME');
-			strTarget = strIPath + strInterfaceName + ".idl";
+			var strInterfaceName = wizard.FindSymbol('YU_INTERFACE_NAME');
+			strTarget = "..\\interface\\" + strInterfaceName + ".idl";
+		}
+		else if( strName == "gentypedef.bat" ) {
+			strTarget = "..\\interface\\" + strName;
 		}
 		else if(strName.substr(0, 4) == "root")
 		{
@@ -489,6 +504,8 @@ function CreateGUID()
 	var a2 = arr[2];
 	var a3 = arr[3];
 	var a4 = arr[4];
+	var guidA = guid.replace("{","");// a0 +¡¡"-" + a1 + "-" + a2 + "-" + a3 + "-" + a4; 
+	guidA = guidA.replace("}","");
 	
 	a0 = a0.replace("{","{ 0x");
 	a0 += ", "
@@ -515,7 +532,6 @@ function CreateGUID()
 	b4 += a4.substring(10,12);
 	b4 += " } }";
 	
-	var guidA = guid; 
 	guid = (a0 + a1 + a2 + b3 + b4);
 	return [guid,guidA];
 }
