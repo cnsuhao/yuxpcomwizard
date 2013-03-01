@@ -3,15 +3,18 @@ function OnFinish(selProj, selObj)
 	try
 	{
 	    /// Ôö¼Ó·ûºÅ 
-	    //wizard.AddSymbol( "GRS_GUID_PLUGIN", CreateGUID() );
-	
         //////////////////////////////////////////////////////////////////////////
 		var strSolutionName = "";
 		var strProjectPath = "";
 		
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
 		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
-		var oldProjFolder = strProjectPath;
+		var oldProjFolder = strProjectPath;		
+		
+		selProj = CreateCustomProject(strProjectName, strProjectPath);
+		strProjectPath = wizard.FindSymbol('PROJECT_PATH');
+		
+/*
 		var strSolutionPath = "";
 		
 		strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
@@ -25,11 +28,10 @@ function OnFinish(selProj, selObj)
 		wizard.AddSymbol( "YU_DIR_DOC", strSolutionPath + "doc\\" );
 		wizard.AddSymbol( "YU_DIR_SRC_INC", strSolutionPath + "src\\include\\" );
 		wizard.AddSymbol( "YU_DIR_SRC_INT", strSolutionPath + "src\\interface\\" );
-		
+		*/
 
 		///////////////
-		//selProj = CreateCustomProject(strProjectName, strProjectPath);
-		selProj = CreateProject(strProjectName, strProjectPath);
+		//selProj = CreateProject(strProjectName, strProjectPath);
 		selProj.Object.Keyword = "xpcomWizProj";
 		
 		
@@ -45,7 +47,10 @@ function OnFinish(selProj, selObj)
 
 		selProj.Object.Save();
 		
-		//DeleteFile(fso, oldProjFolder);
+		
+		//fso = new ActiveXObject('Scripting.FileSystemObject');
+		//wizard.YesNoAlert(oldProjFolder);
+		//fso.DeleteFolder(oldProjFolder);
 		
 	}
 	catch(e)
@@ -62,7 +67,10 @@ function CreateCustomProject(strProjectName, strProjectPath)
 	{
 		var strProjTemplatePath = wizard.FindSymbol('PROJECT_TEMPLATE_PATH');
 		var strProjTemplate = '';
-		strProjTemplate = strProjTemplatePath + '\\default.vcproj';
+		strProjTemplate = strProjTemplatePath + '\\default.vcxproj';
+		var strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
+		strProjectPath = strSolutionPath + "src\\" + strProjectName;
+		wizard.AddSymbol('PROJECT_PATH',  strProjectPath );
 
 		var Solution = dte.Solution;
 		var strSolutionName = "";
@@ -72,28 +80,35 @@ function CreateCustomProject(strProjectName, strProjectPath)
 			strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
 			if (strSolutionName.length)
 			{
-				var strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
-				Solution.Create(strSolutionPath, strSolutionName);
+				Solution.Create(strSolutionPath, strSolutionName);		
 			}
 		}
 
+		
 		var strProjectNameWithExt = '';
-		strProjectNameWithExt = strProjectName + '.vcproj';
+		strProjectNameWithExt = strProjectName + '.vcxproj';
 
 		var oTarget = wizard.FindSymbol("TARGET");
 		var prj;
-		
-		//if (wizard.FindSymbol("WIZARD_TYPE") == vsWizardAddSubProject)  // vsWizardAddSubProject
-		//{
-			//echo("12");
-		//	var prjItem = oTarget.AddFromTemplate(strProjTemplate, strProjectNameWithExt);
-		//	prj = prjItem.SubProject;
-		//}
-		//else
+		if (wizard.FindSymbol("WIZARD_TYPE") == vsWizardAddSubProject)  // vsWizardAddSubProject
+		{
+			var prjItem = oTarget.AddFromTemplate(strProjTemplate, strProjectNameWithExt);
+			prj = prjItem.SubProject;
+		}
+		else
 		{
 			prj = oTarget.AddFromTemplate(strProjTemplate, strProjectPath, strProjectNameWithExt);
 		}
+		var fxtarget = wizard.FindSymbol("TARGET_FRAMEWORK_VERSION");
+		if (fxtarget != null && fxtarget != "")
+		{
+		    fxtarget = fxtarget.split('.', 2);
+		    if (fxtarget.length == 2)
+			prj.Object.TargetFrameworkVersion = parseInt(fxtarget[0]) * 0x10000 + parseInt(fxtarget[1])
+		}
 		
+		//var ss = wizard.FindSymbol('PROJECT_PATH');
+		//wizard.YesNoAlert(ss);	
 		return prj;
 	}
 	catch(e)
@@ -338,7 +353,7 @@ function GetTargetName(strName, strProjectName)
 	{
 		var strTarget = strName;
 		var strResPath = "res\\";
-		
+		var nNameLen = strName.length;
 		if( strName == "yuxpcom_I.idl" ) {
 			var strInterfaceName = wizard.FindSymbol('YU_INTERFACE_NAME');
 			strTarget = "..\\interface\\" + strInterfaceName + ".idl";
@@ -346,9 +361,17 @@ function GetTargetName(strName, strProjectName)
 		else if( strName == "gentypedef.bat" ) {
 			strTarget = "..\\interface\\" + strName;
 		}
-		else if(strName.substr(0, 4) == "root")
+		else if( strName == "bin_comp_yuaccess.manifest" ) {
+			strTarget = "..\\..\\bin\\components\\" + strName.substr(9, nNameLen-9);
+		}
+		else if(strName == "bin_application.ini") {
+			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
+		}
+		else if(strName == "bin_chrome.manifest") {
+			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
+		}		
+		else if(strName.substr(0, 3) == "bin")
 		{
-			var nNameLen = strName.length;
 			if(strName == "root.ico" || strName == "root.exe.Manifest")
 			{
 				strTarget = strResPath + strProjectName + strName.substr(4, nNameLen - 4);
@@ -435,14 +458,13 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 
 function AddGUID()
 {
-	
-	wizard.AddSymbol( "GRS_GUID_PLUGIN", CreateGUID()[0] );
-	
 	if(wizard.FindSymbol('YU_USE_INTERFACE'))
 	{	
-		var interID = CreateGUID();
-		wizard.AddSymbol( "YU_INTERFACE_ID0", interID[1] );	
-		wizard.AddSymbol( "YU_INTERFACE_ID1", interID[0] );	
+		var interID = wizard.CreateGuid();
+		strVal = wizard.FormatGuid(interID, 0);
+		wizard.AddSymbol( "YU_INTERFACE_ID_IDL", strVal );	
+		strVal = wizard.FormatGuid(interID, 2);		
+		wizard.AddSymbol( "YU_INTERFACE_ID_CLASS", strVal );	
 	}
 	
 	var compName = wizard.FIndSymbol('YU_COMP_NAME_UPCASE');
@@ -452,28 +474,8 @@ function AddGUID()
 
 	if(wizard.FindSymbol('GRS_USE_TOOLBAR'))
 	{
-		wizard.AddSymbol( "GRS_GUID_TOOLBAR", CreateGUID() );
+		wizard.AddSymbol( "GRS_GUID_TOOLBAR", wizard.CreateGuid() );
 	}
-	
-	if(wizard.FindSymbol('GRS_USE_MENU'))
-	{
-		wizard.AddSymbol( "GRS_GUID_MENU", CreateGUID() );
-	}
-	
-	if(wizard.FindSymbol('GRS_USE_SET'))
-	{
-		wizard.AddSymbol( "GRS_GUID_SET", CreateGUID() );
-	}
-	
-	if(wizard.FindSymbol('GRS_USE_PANEL'))
-	{
-		wizard.AddSymbol( "GRS_GUID_PANEL", CreateGUID() );
-	}
-	
-	if(wizard.FindSymbol('GRS_USE_EDITOR'))
-	{
-		wizard.AddSymbol( "GRS_GUID_EDITOR", CreateGUID() );
-	}	
 	
 	////
 	var date1;
@@ -493,45 +495,3 @@ function AddGUID()
   wizard.AddSymbol( "YU_CREATE_DATE", dateString );
 }
 
-
-function CreateGUID()
-{
-	var guid = wizard.CreateGuid();	
-	var arr = guid.split('-');
-	
-	var a0 = arr[0];
-	var a1 = arr[1];	
-	var a2 = arr[2];
-	var a3 = arr[3];
-	var a4 = arr[4];
-	var guidA = guid.replace("{","");// a0 +¡¡"-" + a1 + "-" + a2 + "-" + a3 + "-" + a4; 
-	guidA = guidA.replace("}","");
-	
-	a0 = a0.replace("{","{ 0x");
-	a0 += ", "
-	
-	a1 = "0x" + a1 + ", ";
-	a2 = "0x" + a2 + ", ";	
-	
-	var b3 = "{ 0x";
-	b3 += a3.substring(0,2);
-	b3 += ", 0x";
-	b3 += a3.substring(2,4);
-	
-	var b4 = ", 0x";
-	b4 += a4.substring(0,2);
-	b4 += ", 0x";
-	b4 += a4.substring(2,4);
-	b4 += ", 0x";
-	b4 += a4.substring(4,6);
-	b4 += ", 0x";
-	b4 += a4.substring(6,8);
-	b4 += ", 0x";
-	b4 += a4.substring(8,10);
-	b4 += ", 0x";
-	b4 += a4.substring(10,12);
-	b4 += " } }";
-	
-	guid = (a0 + a1 + a2 + b3 + b4);
-	return [guid,guidA];
-}

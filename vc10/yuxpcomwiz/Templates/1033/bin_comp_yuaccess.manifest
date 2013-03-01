@@ -1,0 +1,3 @@
+binary-component yuaccess.dll
+interfaces yuAccess.xpt
+category profile-after-change yuAccess @yudisk.org/yuAccess;1 

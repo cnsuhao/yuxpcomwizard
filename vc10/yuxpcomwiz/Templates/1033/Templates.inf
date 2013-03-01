@@ -6,26 +6,9 @@ yuxpcom_module.cpp
 yuxpcom_I.idl
 doc.txt
 version.txt
-
-[!if WX_USE_MANIFEST]
-
-[!endif]
-
+bin_application.ini
+bin_chrome.manifest
+bin_comp_yuaccess.manifest
 
 
-[!if GRS_USE_TOOLBAR]
-
-[!endif]
-[!if GRS_USE_MENU]
-
-[!endif]
-[!if GRS_USE_PANEL]
-
-[!endif]
-[!if GRS_USE_SET]
-
-[!endif]
-[!if GRS_USE_EDITOR]
-
-[!endif]
 

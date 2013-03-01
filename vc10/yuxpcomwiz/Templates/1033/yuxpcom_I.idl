@@ -1,7 +1,7 @@
 #include "nsISupports.idl"
 
 
- [scriptable, uuid([!output YU_INTERFACE_ID0])]
+ [scriptable, uuid([!output YU_INTERFACE_ID_IDL])]
  interface [!output YU_INTERFACE_NAME] : nsISupports
  {
 	 /**

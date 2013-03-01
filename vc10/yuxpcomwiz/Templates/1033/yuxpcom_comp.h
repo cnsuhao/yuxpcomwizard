@@ -13,8 +13,8 @@
 #include "nsIDOMEventListener.h"
 #include "nsIDOMEventTarget.h"
 
-#define [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID [!output YU_COMP_CONTRACTID]
-#define [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID  [!output YU_INTERFACE_ID1];
+#define [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID "[!output YU_COMP_CONTRACTID]"
+#define [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID  [!output YU_INTERFACE_ID_CLASS];
 
 
 
