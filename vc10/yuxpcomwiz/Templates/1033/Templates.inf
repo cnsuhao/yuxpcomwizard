@@ -3,7 +3,7 @@ gentypedef.bat
 yuxpcom_comp.h
 yuxpcom_comp.cpp
 yuxpcom_module.cpp
-yuxpcom_I.idl
+yuxpcom_I.xpidl
 doc.txt
 version.txt
 inc_doc.txt

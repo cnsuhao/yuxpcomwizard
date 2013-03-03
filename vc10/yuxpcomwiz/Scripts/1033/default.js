@@ -31,10 +31,7 @@ function OnFinish(selProj, selObj)
 		*/
 
 		///////////////
-		//selProj = CreateProject(strProjectName, strProjectPath);
 		selProj.Object.Keyword = "xpcomWizProj";
-		
-		
 		AddConfig(selProj, strProjectName);
 		
 		AddFilters(selProj);
@@ -51,19 +48,7 @@ function OnFinish(selProj, selObj)
 		//fso = new ActiveXObject('Scripting.FileSystemObject');
 		//wizard.YesNoAlert(oldProjFolder);
 		//fso.DeleteFolder(oldProjFolder);
-		
-						//var PreBuildTool = config.Tools("VCPreBuildEventTool");
-				//PreBuildTool.Description = "Buils idl file . . .";
-				//if ( wizard.FindSymbol('YU_USE_INTERFACE'))
-				//{
-				//	gentypedef.bat
-				//	var name = wizard.FindSymbol('PROJECT_NAME');
-					//PreBuildTool.CommandLine = "AutoBuildNumber.exe \"$(ProjectDir)/" + name + ".rc\""
-				//	PreBuildTool.CommandLine = "$(ProjectDir)/interface/gentypedef.bat"
-				//}
 
-		
-		
 		/*
 		var CBTool =  oIdlFile.FileConfigurations("Debug").Tool;
         CBTool.CommandLine = "$(ProjectDir)" + strProjectName + ".bat $(InputFileName)";
@@ -275,6 +260,8 @@ function AddConfig(proj, strProjectName)
 			{
 				LinkTool.LinkIncremental = linkIncrementalNo;
 			}
+			
+			LinkTool.GenerateManifest = false;
 			additionalDepends += "nspr4.lib xpcom.lib xpcomglue_s_nomozalloc.lib";
 			
 			LinkTool.AdditionalDependencies = additionalDepends;
@@ -316,7 +303,14 @@ function AddConfig(proj, strProjectName)
 
 			var PreBuildTool = config.Tools("VCPreBuildEventTool");
 			PreBuildTool.Description = "Buils idl file . . .";
-			PreBuildTool.CommandLine = "$(SolutionDir)\\src\\interface\\gentypedef.bat"
+			PreBuildTool.CommandLine = "$(SolutionDir)\\src\\interface\\gentypedef.bat";
+			
+			var debugSet = config.DebugSettings;
+			if( debugSet ) {
+				debugSet.Command = "$(XPCOM_SDK)\\bin\\xulrunner.exe";
+				debugSet.CommandArguments = "application.ini";
+				debugSet.WorkingDirectory = "..\\..\\bin\\";
+			}
 		}
 	}
 	catch(e)
@@ -374,9 +368,9 @@ function GetTargetName(strName, strProjectName)
 		var strTarget = strName;
 		var strResPath = "res\\";
 		var nNameLen = strName.length;
-		if( strName == "yuxpcom_I.idl" ) {
+		if( strName == "yuxpcom_I.xpidl" ) {
 			var strInterfaceName = wizard.FindSymbol('YU_INTERFACE_NAME');
-			strTarget = "..\\interface\\" + strInterfaceName + ".idl";
+			strTarget = "..\\interface\\" + strInterfaceName + ".xpidl";
 		}
 		else if( strName == "gentypedef.bat" ) {
 			strTarget = "..\\interface\\" + strName;
@@ -514,6 +508,29 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				//wizard.YesNoAlert(strTarget);
 				// Add Files to Project
 				proj.Object.AddFile(strFile);
+				
+				if( strExt == ".xpidl" ) {
+					var stridlName = strTarget.substr(strTarget.lastIndexOf("\\")+1);
+					var oIdlFile = proj.Object.Files( stridlName );
+					if( oIdlFile ) {
+						var cntConf = oIdlFile.FileConfigurations.Count;
+						var nCntConf;
+						for(nCntConf = 1; nCntConf <= cntConf; nCntConf++)
+						{
+							var CBTool =  oIdlFile.FileConfigurations.Item(nCntConf).Tool;
+							if( CBTool ) {
+								wizard.YesNoAlert(CBTool.ToolName);
+								var interName = wizard.FindSymbol('YU_INTERFACE_NAME');
+								CBTool.CommandLine = "..\\interface\\buildxpidl.bat " + "$(InputFileName) " + 
+										"../../bin/components/"+ interName + ".xpt " +
+										"../include/" + interName + ".h";
+								
+								CBTool.Description = "Create header File and xpt File...";
+								CBTool.Outputs = "../include/" + interName + ".h";						
+							}						
+						}					
+					}
+				}
 			}
 		}
 		strTextStream.Close();
@@ -552,7 +569,7 @@ function AddGUID()
 	}
 	
 	////
-	var date1;
+  var date1;
   var dateString;
   date1 = new Date();
   dateString = date1.getFullYear().toString();
