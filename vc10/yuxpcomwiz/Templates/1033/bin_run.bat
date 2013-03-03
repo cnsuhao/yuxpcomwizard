@@ -1,0 +1,1 @@
+%XPCOM_SDK%\bin\xulrunner.exe application.ini

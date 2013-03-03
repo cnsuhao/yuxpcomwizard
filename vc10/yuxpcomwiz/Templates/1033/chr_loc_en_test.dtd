@@ -1,0 +1,40 @@
+<!ENTITY title                 "test">
+
+<!ENTITY file.label            "File">
+<!ENTITY filePageSetup.label   "Page Setup">
+<!ENTITY filePrint.label       "Print">
+<!ENTITY filePrint.accesskey   "P">
+<!ENTITY filePrint.key         "P">
+<!ENTITY fileExit.label        "Exit">
+
+
+<!ENTITY edit.label            "Edit">
+<!ENTITY editCopy.label        "Copy">
+<!ENTITY editCopy.key          "C">
+<!ENTITY editSelectAll.label   "Select All">
+<!ENTITY editSelectAll.key     "A">
+
+
+
+
+
+
+
+<!ENTITY tools.label           "Tools">
+<!ENTITY toolsOptions.label    "Options...">
+<!ENTITY toolsTestYuDisk.label       "YuDisk">
+<!ENTITY toolsTestYuAccess.label     "YuAccess">
+<!ENTITY toolsTestYuStorage.label    "YuStorage">
+<!ENTITY toolsTest.label    "Test">
+
+<!ENTITY help.label            "Help">
+<!ENTITY helpAbout.label       "About...">
+
+
+
+<!ENTITY sidebar.label         "Sidebar">
+<!ENTITY sidebarClose.tooltip  "Close Sidebar">
+<!ENTITY page1Title.label      "Sidebar Page 1">
+<!ENTITY butGo.label      "Go...">
+<!ENTITY labSite.label      "Site:">
+

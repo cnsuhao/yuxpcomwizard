@@ -4,16 +4,5 @@
  [scriptable, uuid([!output YU_INTERFACE_ID_IDL])]
  interface [!output YU_INTERFACE_NAME] : nsISupports
  {
-	 /**
-		proxy's type.
-			- 0 Direct
-			- 1 Manual
-	 */
-	 attribute boolean proxyType;
-	 attribute AString proxyHttp;
-	 attribute long proxyHttpPort;
-	 attribute AString proxySSL;
-	 attribute long proxySSLPort;
-
      long Sum(in long aFirst, in long aSecond);
  };

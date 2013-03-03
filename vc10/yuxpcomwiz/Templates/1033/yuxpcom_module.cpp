@@ -37,7 +37,7 @@ NS_GENERIC_FACTORY_CONSTRUCTOR( [!output YU_COMP_NAME]Component )
 NS_DEFINE_NAMED_CID([!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID);
 
 static const mozilla::Module::CIDEntry k[!output YU_COMP_NAME]ComCIDs[] = {
-	{ &k[!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID, false, NULL, [!output YU_COMP_NAME]Constructor },
+	{ &k[!output YU_COMP_NAME_UPCASE]_COMPONENTS_CID, false, NULL, [!output YU_COMP_NAME]ComponentConstructor },
 	{ NULL }
 };
 

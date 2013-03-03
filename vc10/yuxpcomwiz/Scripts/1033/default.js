@@ -45,13 +45,40 @@ function OnFinish(selProj, selObj)
 		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
 		InfFile.Delete();
 
-		selProj.Object.Save();
+
 		
 		
 		//fso = new ActiveXObject('Scripting.FileSystemObject');
 		//wizard.YesNoAlert(oldProjFolder);
 		//fso.DeleteFolder(oldProjFolder);
 		
+						//var PreBuildTool = config.Tools("VCPreBuildEventTool");
+				//PreBuildTool.Description = "Buils idl file . . .";
+				//if ( wizard.FindSymbol('YU_USE_INTERFACE'))
+				//{
+				//	gentypedef.bat
+				//	var name = wizard.FindSymbol('PROJECT_NAME');
+					//PreBuildTool.CommandLine = "AutoBuildNumber.exe \"$(ProjectDir)/" + name + ".rc\""
+				//	PreBuildTool.CommandLine = "$(ProjectDir)/interface/gentypedef.bat"
+				//}
+
+		
+		
+		/*
+		var CBTool =  oIdlFile.FileConfigurations("Debug").Tool;
+        CBTool.CommandLine = "$(ProjectDir)" + strProjectName + ".bat $(InputFileName)";
+        CBTool.Description = "正在创建头文件和xpt文件...";
+        CBTool.Outputs = ".\\$(InputName).h";
+		
+		oIdlFile.FileConfigurations("Release").Tool = selProj.Object.Configurations("Release").Tools("VCCustomBuildTool");
+        var CBTool =  oIdlFile.FileConfigurations("Release").Tool;
+        CBTool.CommandLine = "$(ProjectDir)" + strProjectName + ".bat $(InputFileName)";
+        CBTool.Description = "正在创建头文件和xpt文件...";
+        CBTool.Outputs = ".\\$(InputName).h"; 
+		*/
+		
+		//////////////////////
+		selProj.Object.Save();		
 	}
 	catch(e)
 	{
@@ -179,7 +206,7 @@ function AddConfig(proj, strProjectName)
 			}
 			
 			config.IntermediateDirectory = "$(Configuration)\\";
-			config.OutputDirectory = "./bin/components/";
+			config.OutputDirectory = "../../bin/components/";
 			config.CharacterSet = charSetUnicode;
 			config.ConfigurationType  = typeDynamicLibrary;
 			
@@ -189,7 +216,7 @@ function AddConfig(proj, strProjectName)
 			//CLTool.TreatWChar_tAsBuiltInType = false;
 			//CLTool.Detect64BitPortabilityProblems = true;
 			CLTool.WarningLevel = warningLevel_3;
-			CLTool.AdditionalIncludeDirectories = ".\\include;.\\interface;$(XPCOM_SDK)\\include"
+			CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;$(XPCOM_SDK)\\include"
 			
 			//var forcedIncludes = "stdafx.h;";
 			//CLTool.ForcedIncludeFiles = forcedIncludes;
@@ -228,12 +255,6 @@ function AddConfig(proj, strProjectName)
 				
 			strDefines += "_WINDOWS;";
 			
-			// 添加 Tinyxml++ 的预定义符号
-			if(wizard.FindSymbol('GRS_USE_LIB_TINYXML'))
-			{
-				strDefines += "TIXML_USE_TICPP;"
-			}
-			
 			strDefines += "_CRT_SECURE_NO_DEPRECATE;"
 			
 			CLTool.PreprocessorDefinitions = strDefines;
@@ -255,11 +276,6 @@ function AddConfig(proj, strProjectName)
 				LinkTool.LinkIncremental = linkIncrementalNo;
 			}
 			additionalDepends += "nspr4.lib xpcom.lib xpcomglue_s_nomozalloc.lib";
-			
-			if(wizard.FindSymbol('GRS_USE_LIB_TINYXML'))
-			{
-				additionalDepends += " tinyxml++.lib"
-			}
 			
 			LinkTool.AdditionalDependencies = additionalDepends;
 			LinkTool.AdditionalLibraryDirectories = "$(XPCOM_SDK)\\lib";
@@ -297,6 +313,10 @@ function AddConfig(proj, strProjectName)
 				//	PreBuildTool.CommandLine = "$(ProjectDir)/interface/gentypedef.bat"
 				//}
 			}
+
+			var PreBuildTool = config.Tools("VCPreBuildEventTool");
+			PreBuildTool.Description = "Buils idl file . . .";
+			PreBuildTool.CommandLine = "$(SolutionDir)\\src\\interface\\gentypedef.bat"
 		}
 	}
 	catch(e)
@@ -369,23 +389,79 @@ function GetTargetName(strName, strProjectName)
 		}
 		else if(strName == "bin_chrome.manifest") {
 			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
-		}		
-		else if(strName.substr(0, 3) == "bin")
-		{
-			if(strName == "root.ico" || strName == "root.exe.Manifest")
-			{
-				strTarget = strResPath + strProjectName + strName.substr(4, nNameLen - 4);
-			}
-			else
-			{
-				strTarget = strProjectName + strName.substr(4, nNameLen - 4);
-			}
 		}
-		else if(strName.substr(0, 4) == "safe")
+		else if(strName == "bin_build.xml") {
+			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
+		}		
+		else if(strName == "bin_install.rdf") {
+			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
+		}		
+		else if(strName == "bin_run.bat") {
+			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
+		}
+		else if(strName == "bin_def_pre_prefs.js") {
+			strTarget = "..\\..\\bin\\defaults\\preferences\\" + strName.substr(12, nNameLen-12);
+		}
+		else if(strName == "chr_con_about.js") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_about.xul") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_controller.js") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_head.js") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_options.xul") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_opt_network.xul") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_test.js") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_con_test.xul") {
+			strTarget = "..\\..\\bin\\chrome\\content\\" + strName.substr(8, nNameLen-8);
+		}
+		else if(strName == "chr_loc_en_about.dtd") {
+			strTarget = "..\\..\\bin\\chrome\\locale\\en-US\\" + strName.substr(11, nNameLen-11);
+		}
+		else if(strName == "chr_loc_en_options.dtd") {
+			strTarget = "..\\..\\bin\\chrome\\locale\\en-US\\" + strName.substr(11, nNameLen-11);
+		}
+		else if(strName == "chr_loc_en_opt_network.dtd") {
+			strTarget = "..\\..\\bin\\chrome\\locale\\en-US\\" + strName.substr(11, nNameLen-11);
+		}
+		else if(strName == "chr_loc_en_test.dtd") {
+			strTarget = "..\\..\\bin\\chrome\\locale\\en-US\\" + strName.substr(11, nNameLen-11);
+		}
+		else if(strName == "chr_skin_about.css") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\" + strName.substr(9, nNameLen-9);
+		}
+		else if(strName == "chr_skin_options.css") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\" + strName.substr(9, nNameLen-9);
+		}
+		else if(strName == "chr_skin_test.css") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\" + strName.substr(9, nNameLen-9);
+		}			
+		else if(strName == "chr_skin_close.png") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\images\\" + strName.substr(9, nNameLen-9);
+		}
+		else if(strName == "chr_skin_copy.png") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\images\\" + strName.substr(9, nNameLen-9);
+		}		
+		else if(strName == "chr_skin_options-big.png") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\images\\" + strName.substr(9, nNameLen-9);
+		}
+		else if(strName == "chr_skin_options-network.png") {
+			strTarget = "..\\..\\bin\\chrome\\skin\\images\\" + strName.substr(9, nNameLen-9);
+		}
+		else if( strName == "inc_doc.txt" )
 		{
-			var nNameLen = strName.length;
-			var strSafeProjectName = wizard.FindSymbol('YU_COMP_NAME');
-			strTarget = strSafeProjectName + strName.substr(4, nNameLen - 4);
+			strTarget = "..\\include\\" + strName.substr(4, nNameLen-4);
 		}
 		else if(strName.substr(0, 7) == "yuxpcom" )
 		{
@@ -427,25 +503,17 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 
 				var bCopyOnly = false;  //"true" will only copy the file from strTemplate to strTarget without rendering/adding to the project
 				var strExt = strName.substr(strName.lastIndexOf("."));
-				if(strExt==".bmp" || strExt==".ico" || strExt==".gif" || strExt==".rtf" || strExt==".css" || strExt== ".exe")
+				if(strExt==".bmp" || strExt==".ico" || strExt==".gif" || strExt==".rtf" || strExt==".css" || strExt== ".exe"
+					|| strExt== ".png")
 					bCopyOnly = true;
+					
 				wizard.RenderTemplate(strTemplate, strFile, bCopyOnly);
 				if ( bCopyOnly )
 					continue;
 				
-				if(strTarget == strSafeProjectName + "_I.h")
-				{
-					//if(wizard.FindSymbol('GRS_USE_INTERFACE'))
-					{
-						// Add Files to GRS Interface Filter
-						//grsIFilter.AddFile(strFile);
-					}						
-				}
-				else
-				{
-					// Add Files to Project
-					proj.Object.AddFile(strFile);
-				}
+				//wizard.YesNoAlert(strTarget);
+				// Add Files to Project
+				proj.Object.AddFile(strFile);
 			}
 		}
 		strTextStream.Close();
@@ -467,9 +535,15 @@ function AddGUID()
 		wizard.AddSymbol( "YU_INTERFACE_ID_CLASS", strVal );	
 	}
 	
-	var compName = wizard.FIndSymbol('YU_COMP_NAME_UPCASE');
+	var compName = wizard.FindSymbol('YU_COMP_NAME');
 	if( compName ) {
 		wizard.AddSymbol( "YU_COMP_NAME_UPCASE", compName.toUpperCase() );	
+	}
+	
+	var interName = wizard.FindSymbol('YU_INTERFACE_NAME');
+	if( interName ) {
+		
+		wizard.AddSymbol( "YU_INTERFACE_NAME_UPCASE", interName.toUpperCase() );
 	}
 
 	if(wizard.FindSymbol('GRS_USE_TOOLBAR'))

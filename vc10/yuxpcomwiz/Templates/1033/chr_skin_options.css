@@ -1,0 +1,14 @@
+/* global skin ------------------------------------------------------------- */
+@import url(chrome://global/skin/);
+
+radio[pane="pane_general"] {
+  list-style-image: url(chrome://test/skin/images/options-big.png);
+}
+
+radio[pane="pane_network"] {
+  list-style-image: url(chrome://test/skin/images/options-network.png);
+}
+
+grid label {
+	text-align:right;
+}

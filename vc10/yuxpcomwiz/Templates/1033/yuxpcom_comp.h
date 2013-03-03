@@ -4,7 +4,7 @@
 #ifndef _[!output YU_COMP_NAME_UPCASE]_COMPONENTS_H_
 #define _[!output YU_COMP_NAME_UPCASE]_COMPONENTS_H_
 
-#include "yuaccess_i.h"
+#include "[!output YU_INTERFACE_NAME].h"
 #include "nsIServiceManager.h"
 #include "nsICategoryManager.h"
 #include "nsIObserver.h"
@@ -25,7 +25,7 @@ class [!output YU_COMP_NAME]Component :
 {
 public:
 	NS_DECL_ISUPPORTS
-	NS_DECL_IYUACCESS
+	NS_DECL_[!output YU_INTERFACE_NAME_UPCASE]
 	NS_DECL_NSIOBSERVER
 	NS_DECL_NSIDOMEVENTLISTENER
 

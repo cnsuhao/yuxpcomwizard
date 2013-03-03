@@ -1,0 +1,12 @@
+<!ENTITY groupCaption.label    "Configure Proxies to Access the Internet">
+
+<!ENTITY proxyType.lable    "Proxy Type">
+<!ENTITY typeDirect.lable    "Direct(No proxy)">
+<!ENTITY typeManual.lable    "Manual proxy configuration">
+<!ENTITY httpProxy.label    "HTTP Proxy:">
+<!ENTITY ftpProxy.label    "FTP Proxy:">
+<!ENTITY sslProxy.label    "SSL Proxy:">
+<!ENTITY socksProxy.label    "SOCKS Proxy:">
+
+<!ENTITY port.label    "Port:">
+

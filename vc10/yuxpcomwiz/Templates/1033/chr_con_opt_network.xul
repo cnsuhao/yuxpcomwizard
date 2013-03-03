@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://test/skin/options.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://test/locale/opt_network.dtd">
+ 
+<overlay id="options-Network-overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!-- Pane Network -->
+ 	<prefpane id="pane_network">
+	    <preferences>
+	      <preference id="pref-proxytype" name="network.proxy.type" type="int"/>
+	      <preference id="pref-proxyhttp" name="network.proxy.http" type="string"/>      
+	      <preference id="pref-proxyhttpport" name="network.proxy.http_port" type="int"/>
+	      <preference id="pref-proxyftp" name="network.proxy.ftp" type="string"/>     
+	      <preference id="pref-proxyftpport" name="network.proxy.ftp_port" type="int"/>
+	      <preference id="pref-proxyssl" name="network.proxy.ssl" type="string"/>     
+	      <preference id="pref-proxysslport" name="network.proxy.ssl_port" type="int"/>
+	      <preference id="pref-proxysocks" name="network.proxy.socks" type="string"/>     
+	      <preference id="pref-proxysocksport" name="network.proxy.socks_port" type="int"/>       
+	    </preferences>
+		<groupbox>
+			<caption label="&groupCaption.label;"/>
+		    <hbox align="center">
+		    	<radiogroup orient="vertical" value="radio" preference="pref-proxytype" >
+					<radio label="&typeDirect.lable;" value="0" />
+					<radio label="&typeManual.lable;" value="1" />
+				</radiogroup>
+		    </hbox>
+		      <grid style="margin-left:20px;">
+			    <columns>
+			      <column flex="0"/>
+			      <column flex="4"/>
+				  <column flex="0"/>
+				  <column flex="1"/>		      
+			    </columns>
+			    <rows>
+			      <row>
+			    	<label value="&httpProxy.label;" />
+			    	<textbox preference="pref-proxyhttp" flex="1"/>
+			     	<label value="&port.label;" />   	
+			    	<textbox type="number" preference="pref-proxyhttpport"/>  
+			      </row>
+			      <row>
+				    <label value="&ftpProxy.label;" />
+			    	<textbox preference="pref-proxyftp" flex="1"/>
+			     	<label value="&port.label;" />   	
+			    	<textbox type="number" preference="pref-proxyftpport"/>    
+			      </row>
+			      <row>
+			    	<label value="&sslProxy.label;" />
+			    	<textbox preference="pref-proxyssl" flex="1"/>
+			     	<label value="&port.label;" />   	
+			    	<textbox type="number" preference="pref-proxysslport"/> 			      	
+			      </row>			      
+			      <row>
+			    	<label value="&socksProxy.label;" />
+			    	<textbox preference="pref-proxysocks" flex="1"/>
+			     	<label value="&port.label;" />   	
+			    	<textbox type="number" preference="pref-proxysocksport"/>   			      	
+			      </row>
+			    </rows>
+			  </grid>  		
+		</groupbox>
+	</prefpane>
+</overlay>
+
+

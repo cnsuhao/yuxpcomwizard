@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://test/skin/options.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://test/locale/options.dtd">
+ 
+<prefwindow id="options" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&options.title;" style="width: 42em; min-height: 37.5em;">
+
+<!-- Pane General -->
+	<prefpane id="pane_general" label="&paneGeneral.label;">
+	  <preferences>
+	    <preference id="pref_yudiskType" name="yudisk.type" type="int"/>
+	  </preferences>
+
+	  <groupbox id="section2">
+	    <caption label="&section2.label;"/>
+		<textbox label="Duration:" preference="pref_yudiskType"/>
+	  </groupbox>
+  
+	</prefpane>
+	
+	<!-- Pane Network -->
+	<prefpane id="pane_network" label="&paneNetwork.label;" src="chrome://test/content/opt_network.xul" />
+
+</prefwindow>
