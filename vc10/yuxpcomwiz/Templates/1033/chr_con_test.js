@@ -28,7 +28,6 @@ window.addEventListener("unload", test_shutdown, false);
 
 var test = {
   initialized : false,
-  _kpd: null,
   
   _handleWindowClose : function(event) {
     // handler for clicking on the 'x' to close the window
@@ -83,9 +82,6 @@ var test = {
     this._initSidebar("sidebar_page1");
 
 	document.getElementById("butGo").addEventListener("click", function(event) { self.butGoClick(); }, false);
-
-	kpDisk.init( this );
-	this._kpd = kpDisk;
 
 	////
     FileController.init(this);

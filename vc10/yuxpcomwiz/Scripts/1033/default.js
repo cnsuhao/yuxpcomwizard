@@ -49,19 +49,6 @@ function OnFinish(selProj, selObj)
 		//wizard.YesNoAlert(oldProjFolder);
 		//fso.DeleteFolder(oldProjFolder);
 
-		/*
-		var CBTool =  oIdlFile.FileConfigurations("Debug").Tool;
-        CBTool.CommandLine = "$(ProjectDir)" + strProjectName + ".bat $(InputFileName)";
-        CBTool.Description = "正在创建头文件和xpt文件...";
-        CBTool.Outputs = ".\\$(InputName).h";
-		
-		oIdlFile.FileConfigurations("Release").Tool = selProj.Object.Configurations("Release").Tools("VCCustomBuildTool");
-        var CBTool =  oIdlFile.FileConfigurations("Release").Tool;
-        CBTool.CommandLine = "$(ProjectDir)" + strProjectName + ".bat $(InputFileName)";
-        CBTool.Description = "正在创建头文件和xpt文件...";
-        CBTool.Outputs = ".\\$(InputName).h"; 
-		*/
-		
 		//////////////////////
 		selProj.Object.Save();		
 	}
@@ -210,7 +197,6 @@ function AddConfig(proj, strProjectName)
 			CLTool.PrecompiledHeaderFile = "$(IntDir)/$(TargetName).pch";
 			CLTool.UsePrecompiledHeader = pchNone;
 			//CLTool.UsePrecompiledHeader = pchCreateUsingSpecific;
-			
 			//CLTool.ExceptionHandling = true;
 			
 			if(bDebug)
@@ -288,29 +274,20 @@ function AddConfig(proj, strProjectName)
 				RCTool.PreprocessorDefinitions = "NDEBUG";
 			
 			// 添加预编译事件
-			if(!bDebug)
-			{
-				//var PreBuildTool = config.Tools("VCPreBuildEventTool");
-				//PreBuildTool.Description = "Buils idl file . . .";
-				//if ( wizard.FindSymbol('YU_USE_INTERFACE'))
-				//{
-				//	gentypedef.bat
-				//	var name = wizard.FindSymbol('PROJECT_NAME');
-					//PreBuildTool.CommandLine = "AutoBuildNumber.exe \"$(ProjectDir)/" + name + ".rc\""
-				//	PreBuildTool.CommandLine = "$(ProjectDir)/interface/gentypedef.bat"
-				//}
-			}
-
+			/*
 			var PreBuildTool = config.Tools("VCPreBuildEventTool");
 			PreBuildTool.Description = "Buils idl file . . .";
 			PreBuildTool.CommandLine = "$(SolutionDir)\\src\\interface\\gentypedef.bat";
-			
+			*/	
+
+			// Add Debug Setting
 			var debugSet = config.DebugSettings;
 			if( debugSet ) {
 				debugSet.Command = "$(XPCOM_SDK)\\bin\\xulrunner.exe";
 				debugSet.CommandArguments = "application.ini";
 				debugSet.WorkingDirectory = "..\\..\\bin\\";
 			}
+
 		}
 	}
 	catch(e)
@@ -372,11 +349,15 @@ function GetTargetName(strName, strProjectName)
 			var strInterfaceName = wizard.FindSymbol('YU_INTERFACE_NAME');
 			strTarget = "..\\interface\\" + strInterfaceName + ".xpidl";
 		}
-		else if( strName == "gentypedef.bat" ) {
+		//else if( strName == "gentypedef.bat" ) {
+		//	strTarget = "..\\interface\\" + strName;
+		//}
+		else if( strName == "buildxpidl.bat" ) {
 			strTarget = "..\\interface\\" + strName;
-		}
+		}		
 		else if( strName == "bin_comp_yuaccess.manifest" ) {
-			strTarget = "..\\..\\bin\\components\\" + strName.substr(9, nNameLen-9);
+			var strCompName = wizard.FindSymbol('YU_COMP_NAME');
+			strTarget = "..\\..\\bin\\components\\" + strCompName + ".manifest";
 		}
 		else if(strName == "bin_application.ini") {
 			strTarget = "..\\..\\bin\\" + strName.substr(4, nNameLen-4);
@@ -519,9 +500,8 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 						{
 							var CBTool =  oIdlFile.FileConfigurations.Item(nCntConf).Tool;
 							if( CBTool ) {
-								wizard.YesNoAlert(CBTool.ToolName);
 								var interName = wizard.FindSymbol('YU_INTERFACE_NAME');
-								CBTool.CommandLine = "..\\interface\\buildxpidl.bat " + "$(InputFileName) " + 
+								CBTool.CommandLine = "..\\interface\\buildxpidl.bat " + interName +".xpidl " + 
 										"../../bin/components/"+ interName + ".xpt " +
 										"../include/" + interName + ".h";
 								

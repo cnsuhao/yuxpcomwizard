@@ -77,9 +77,7 @@ var ToolsController = {
     var isSupported = false;
     switch (cmd) {
       case "cmd_options":
-	  case "cmd_testYuDisk":
-	  case "cmd_testYuAccess":
-	  case "cmd_testYuStorage":
+	  case "cmd_test[!output YU_COMP_NAME]":
 	  case "cmd_test":
         isSupported = true;
         break;
@@ -94,48 +92,21 @@ var ToolsController = {
     return true;
   },
   
-  doTestYuAccess : function() {
+  doTest[!output YU_COMP_NAME] : function() {
 	try {   
-		const cid = "@yutools.com/yuAccess;1";   
-		obj = Components.classes[cid].getService(Components.interfaces.yuIAccess);   // bind the instance we just created to our interface   
+		const cid = "[!output YU_COMP_CONTRACTID]";   
+		obj = Components.classes[cid].getService(Components.interfaces.[!output YU_INTERFACE_NAME]);   // bind the instance we just created to our interface   
 		//obj = obj.QueryInterface();  
 	} catch (err) {
 		alert(err);
 		return;  
 	}  
 	var res = obj.Sum(3, 4);  
-	alert('yuAccess: Performing 3+4. Returned ' + res + '.'); 
+	alert('[!output YU_COMP_NAME]: Performing 3+4. Returned ' + res + '.'); 
   },
   
-  doTestYuDisk : function() {
-	try {   
-		const cid = "@yutools.com/yuDisk;1";   
-		//obj = Components.classes[cid].getService(Components.interfaces.IYuDisk);   // bind the instance we just created to our interface   
-		obj = Components.classes[cid].createInstance();   // bind the instance we just created to our interface   
-		obj = obj.QueryInterface(Components.interfaces.yuIDisk);  
-	} catch (err) {
-		alert(err);
-		return;  
-	}  
-	var res = obj.Sum(5, 4);  
-	alert('yuDisk: Performing 3+4. Returned ' + res + '.'); 
-  },  
-  
-  
-  doTestYuStorage : function() {
-	try {    
-		const cid = "@yutools.com/yuStorage;1";   
-		obj = Components.classes[cid].getService(Components.interfaces.yuIStorage);   // bind the instance we just created to our interface    
-	} catch (err) {
-		alert(err);
-		return;  
-	}  
-	var res = obj.Sum(3, 4);  
-	alert('yuStorage: Performing 3+4. Returned ' + res + '.'); 
-  },  
-  
   doTest : function() {	
-	this._app._kpd.reqToken();
+	
   },  
   
   
@@ -147,20 +118,11 @@ var ToolsController = {
         window.openDialog("chrome://test/content/options.xul", "options123", features );
       }
 	  break;
-	  case "cmd_testYuDisk":
+	  case "cmd_test[!output YU_COMP_NAME]":
 	  {
-	    this.doTestYuDisk();
-	  }
-	  break;
-	  case "cmd_testYuAccess":
-	  {
-	    this.doTestYuAccess();
+	    this.doTest[!output YU_COMP_NAME]();
 	  }
 	  break;	  
-	  case "cmd_testYuStorage":
-	  {
-	    this.doTestYuStorage();
-	  }
 	  break;
 	  case "cmd_test":
 	  {

@@ -10,7 +10,6 @@
   <script type="application/x-javascript" src="chrome://global/content/printUtils.js"/>
 
   <script type="application/x-javascript" src="chrome://test/content/head.js"/> 
-  <script type="application/x-javascript" src="chrome://test/content/kuaipan.js"/> 
   <script type="application/x-javascript" src="chrome://test/content/controller.js"/>
   <script type="application/x-javascript" src="chrome://test/content/test.js"/>
 
@@ -33,9 +32,7 @@
 
   <commandset id="cmdset_tools">
     <command id="cmd_options" label="&toolsOptions.label;" oncommand="CommandUpdater.doCommand(this.id);"/>	
-    <command id="cmd_testYuDisk" label="&toolsTestYuDisk.label;" oncommand="CommandUpdater.doCommand(this.id);"/>
-    <command id="cmd_testYuAccess" label="&toolsTestYuAccess.label;" oncommand="CommandUpdater.doCommand(this.id);"/>	
-    <command id="cmd_testYuStorage" label="&toolsTestYuStorage.label;" oncommand="CommandUpdater.doCommand(this.id);"/>	
+    <command id="cmd_test[!output YU_COMP_NAME]" label="&toolsTestYuAccess.label;" oncommand="CommandUpdater.doCommand(this.id);"/>	
     <command id="cmd_test" label="&toolsTest.label;" oncommand="CommandUpdater.doCommand(this.id);"/>		
   </commandset>
 
@@ -75,9 +72,7 @@
         <menupopup id="tools_popup">
           <menuitem command="cmd_options"/>
           <menuseparator/>
-          <menuitem command="cmd_testYuDisk"/>
-          <menuitem command="cmd_testYuAccess"/>
-          <menuitem command="cmd_testYuStorage"/>
+          <menuitem command="cmd_test[!output YU_COMP_NAME]"/>
           <menuitem command="cmd_test"/>		  
         </menupopup>
       </menu>
