@@ -1,8 +1,4 @@
 content	test	chrome/content/
 locale	test	en-US	chrome/locale/en-US/
 skin	test	classic/1.0	chrome/skin/
-manifest components/samplecomp.manifest
-manifest components/yuaccess.manifest
-manifest components/yustorage.manifest
-manifest components/yudisk.manifest
-manifest components/yuoauth.manifest
+manifest components/[!output YU_COMP_NAME].manifest

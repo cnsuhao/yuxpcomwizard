@@ -252,6 +252,8 @@ function AddConfig(proj, strProjectName)
 			
 			LinkTool.AdditionalDependencies = additionalDepends;
 			LinkTool.AdditionalLibraryDirectories = "$(XPCOM_SDK)\\lib";
+			var strCompName = wizard.FindSymbol('YU_COMP_NAME');
+			LinkTool.OutputFile = "$(OutDir)" + strCompName + "$(TargetExt)";
 		
 			// As of VC8, manifests are used with executables to inform the operating system of its DLL dependencies
 			// This covers ATL, MFC, Standard C++, and CRT libraries, see the MSDN topic "Visual C++ Libraries as Shared Side-by-Side Assemblies" for details
