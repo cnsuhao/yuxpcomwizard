@@ -47,7 +47,7 @@ static const mozilla::Module::ContractIDEntry k[!output YU_COMP_NAME]Contracts[]
 };
 
 static const mozilla::Module::CategoryEntry k[!output YU_COMP_NAME]Categories[] = {
-	{"yuaccess-category", "yuaccess-key", [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID },
+	{"[!output YU_COMP_NAME]-category", "[!output YU_COMP_NAME]-key", [!output YU_COMP_NAME_UPCASE]_COMPONENTS_CONTRACTID },
 	{ NULL }
 };
 

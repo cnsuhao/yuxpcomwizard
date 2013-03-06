@@ -1,3 +1,6 @@
 binary-component [!output YU_COMP_NAME].dll
 interfaces [!output YU_INTERFACE_NAME].xpt
+
+[!if YU_COMP_AS_SERVICES]
 category profile-after-change [!output YU_COMP_NAME] [!output YU_COMP_CONTRACTID]
+[!endif]
