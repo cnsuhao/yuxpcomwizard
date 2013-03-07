@@ -1,18 +1,21 @@
 
-buildxpidl.bat
 yuxpcom_comp.h
 yuxpcom_comp.cpp
 yuxpcom_module.cpp
 yuxpcom_I.xpidl
 doc.txt
-version.txt
 inc_doc.txt
-bin_application.ini
+version.txt
 bin_chrome.manifest
 bin_comp_yuaccess.manifest
-bin_build.xml
-bin_def_pre_prefs.js
+
+
+[!if YU_FIRST_PROJECT]
+buildxpidl.bat
+bin_application.ini
 bin_install.rdf
+bin_def_pre_prefs.js
+bin_build.xml
 bin_run.bat
 chr_con_about.js
 chr_con_about.xul
@@ -33,4 +36,5 @@ chr_skin_options-big.png
 chr_skin_options-network.png
 chr_skin_options.css
 chr_skin_test.css
+[!endif]
 

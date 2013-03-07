@@ -343,6 +343,7 @@ function InitDocument(document)
 function ClickHaveInterface( )
 {
 	YU_INTERFACE_NAME.disabled = !YU_USE_INTERFACE.checked;
+	YU_INTERFACE_INHERI_NSIOBSERVER.disable = !YU_USE_INTERFACE.checked;
 }
 
 function Next(document, linkto)
@@ -363,6 +364,8 @@ function OnInit()
 
 	YU_INTERFACE_NAME.value = "yuIAccess";
 	YU_INTERFACE_NAME.disabled = false;
+	
+	YU_INTERFACE_INHERI_NSIOBSERVER.disable = false;
 	
 	var compName = "yuAccess"
 	YU_COMP_NAME.value = compName;

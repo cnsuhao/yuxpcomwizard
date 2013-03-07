@@ -42,9 +42,6 @@ function OnFinish(selProj, selObj)
 		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
 		InfFile.Delete();
 
-
-		
-		
 		//fso = new ActiveXObject('Scripting.FileSystemObject');
 		//wizard.YesNoAlert(oldProjFolder);
 		//fso.DeleteFolder(oldProjFolder);
@@ -79,7 +76,8 @@ function CreateCustomProject(strProjectName, strProjectPath)
 			strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
 			if (strSolutionName.length)
 			{
-				Solution.Create(strSolutionPath, strSolutionName);		
+				Solution.Create(strSolutionPath, strSolutionName);
+				wizard.AddSymbol( "YU_FIRST_PROJECT", true );
 			}
 		}
 
@@ -98,6 +96,7 @@ function CreateCustomProject(strProjectName, strProjectPath)
 		{
 			prj = oTarget.AddFromTemplate(strProjTemplate, strProjectPath, strProjectNameWithExt);
 		}
+		
 		var fxtarget = wizard.FindSymbol("TARGET_FRAMEWORK_VERSION");
 		if (fxtarget != null && fxtarget != "")
 		{
@@ -105,9 +104,7 @@ function CreateCustomProject(strProjectName, strProjectPath)
 		    if (fxtarget.length == 2)
 			prj.Object.TargetFrameworkVersion = parseInt(fxtarget[0]) * 0x10000 + parseInt(fxtarget[1])
 		}
-		
-		//var ss = wizard.FindSymbol('PROJECT_PATH');
-		//wizard.YesNoAlert(ss);	
+			
 		return prj;
 	}
 	catch(e)
@@ -132,6 +129,7 @@ function AddFilters(proj)
 		strSrcFilter = wizard.FindSymbol('RESOURCE_FILTER');
 		group = proj.Object.AddFilter('Resource Files');
 		group.Filter = strSrcFilter;
+		
 		
 		if( wizard.FindSymbol('YU_USE_INTERFACE') )
 		{
@@ -467,6 +465,21 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 		var strTpl = '';
 		var strName = '';
 		
+		// add new filter
+		var binFilter = proj.Object.AddFilter('bin');
+		var chrFilter = binFilter.AddFilter('chrome');
+		var compFilter = binFilter.AddFilter('components');
+			compFilter.Filter = "xpt";
+		var defFilter = binFilter.AddFilter('defaults');
+		
+		var contentFilter = chrFilter.AddFilter('content');
+		var localeFilter = chrFilter.AddFilter('locale');
+			var enFilter = localeFilter.AddFilter('en-US');
+		var skinFilter = chrFilter.AddFilter('skin');
+			var imgsFilter = skinFilter.AddFilter('images');
+			
+		var prefFilter = defFilter.AddFilter('preferences');
+		
 		var strTextStream = InfFile.OpenAsTextStream(1, -2);
 		while (!strTextStream.AtEndOfStream)
 		{
@@ -490,8 +503,89 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				
 				//wizard.YesNoAlert(strTarget);
 				// Add Files to Project
-				proj.Object.AddFile(strFile);
-				
+				if( strName == "bin_comp_yuaccess.manifest" ) {
+					compFilter.AddFile(strFile);
+				}
+				else if(strName == "bin_application.ini") {
+					binFilter.AddFile(strFile);
+				}
+				else if(strName == "bin_chrome.manifest") {
+					binFilter.AddFile(strFile);
+				}
+				else if(strName == "bin_build.xml") {
+					binFilter.AddFile(strFile);
+				}		
+				else if(strName == "bin_install.rdf") {
+					binFilter.AddFile(strFile);
+				}		
+				else if(strName == "bin_run.bat") {
+					binFilter.AddFile(strFile);
+				}
+				else if(strName == "bin_def_pre_prefs.js") {
+					prefFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_about.js") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_about.xul") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_controller.js") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_head.js") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_options.xul") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_opt_network.xul") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_test.js") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_con_test.xul") {
+					contentFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_loc_en_about.dtd") {
+					enFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_loc_en_options.dtd") {
+					enFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_loc_en_opt_network.dtd") {
+					enFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_loc_en_test.dtd") {
+					enFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_skin_about.css") {
+					skinFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_skin_options.css") {
+					skinFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_skin_test.css") {
+					skinFilter.AddFile(strFile);
+				}			
+				else if(strName == "chr_skin_close.png") {
+					imgsFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_skin_copy.png") {
+					imgsFilter.AddFile(strFile);
+				}		
+				else if(strName == "chr_skin_options-big.png") {
+					imgsFilter.AddFile(strFile);
+				}
+				else if(strName == "chr_skin_options-network.png") {
+					imgsFilter.AddFile(strFile);
+				}
+				else{
+					proj.Object.AddFile(strFile);				
+				}
+
+				// Add xpidl's custom build prop
 				if( strExt == ".xpidl" ) {
 					var stridlName = strTarget.substr(strTarget.lastIndexOf("\\")+1);
 					var oIdlFile = proj.Object.Files( stridlName );
@@ -541,14 +635,9 @@ function AddGUID()
 	
 	var interName = wizard.FindSymbol('YU_INTERFACE_NAME');
 	if( interName ) {
-		
 		wizard.AddSymbol( "YU_INTERFACE_NAME_UPCASE", interName.toUpperCase() );
 	}
 
-	if(wizard.FindSymbol('GRS_USE_TOOLBAR'))
-	{
-		wizard.AddSymbol( "GRS_GUID_TOOLBAR", wizard.CreateGuid() );
-	}
 	
 	////
   var date1;
