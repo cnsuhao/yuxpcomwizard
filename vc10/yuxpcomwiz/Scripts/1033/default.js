@@ -2,6 +2,17 @@ function OnFinish(selProj, selObj)
 {
 	try
 	{
+		var isSDKVar = wizard.FindSymbol('YU_XPCOM_SDK_IS_VIRIANT');
+		if( isSDKVar ) {
+			var valD = wizard.FindSymbol('YU_XPCOM_SDK_PATH_DEBUG');
+			valD = "$(" + valD + ")";
+			wizard.AddSymbol('YU_XPCOM_SDK_PATH_DEBUG',  valD );
+			
+			valD = wizard.FindSymbol('YU_XPCOM_SDK_PATH_RELEASE');
+			valD = "$(" + valD + ")";
+			wizard.AddSymbol('YU_XPCOM_SDK_PATH_RELEASE',  valD );
+		}
+		
 	    /// Ôö¼Ó·ûºÅ 
         //////////////////////////////////////////////////////////////////////////
 		var strSolutionName = "";
@@ -185,8 +196,15 @@ function AddConfig(proj, strProjectName)
 			//CLTool.TreatWChar_tAsBuiltInType = false;
 			//CLTool.Detect64BitPortabilityProblems = true;
 			CLTool.WarningLevel = warningLevel_3;
-			CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;$(XPCOM_SDK)\\include;$(XPCOM_SDK)\\include\\nspr";
 			
+			if(bDebug)
+			{ 
+				var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_DEBUG');
+				CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;" + val + "\\include;" + val + "\\include\\nspr";
+			}else{
+				var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_RELEASE');
+				CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;" + val + "\\include;" + val + "\\include\\nspr";
+			}
 			//var forcedIncludes = "stdafx.h;";
 			//CLTool.ForcedIncludeFiles = forcedIncludes;
 
@@ -248,7 +266,17 @@ function AddConfig(proj, strProjectName)
 			additionalDepends += "nspr4.lib xpcom.lib xpcomglue_s_nomozalloc.lib";
 			
 			LinkTool.AdditionalDependencies = additionalDepends;
-			LinkTool.AdditionalLibraryDirectories = "$(XPCOM_SDK)\\lib";
+			//LinkTool.AdditionalLibraryDirectories = "$(XPCOM_SDK)\\lib";
+			if(bDebug)
+			{ 
+				var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_DEBUG');
+				LinkTool.AdditionalLibraryDirectories = val + "\\lib";
+			}else{
+				var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_RELEASE');
+				LinkTool.AdditionalLibraryDirectories = val + "\\lib";
+			}
+			
+			
 			var strCompName = wizard.FindSymbol('YU_COMP_NAME');
 			LinkTool.OutputFile = "$(OutDir)" + strCompName + "$(TargetExt)";
 		
@@ -282,7 +310,16 @@ function AddConfig(proj, strProjectName)
 			// Add Debug Setting
 			var debugSet = config.DebugSettings;
 			if( debugSet ) {
-				debugSet.Command = "$(XPCOM_SDK)\\bin\\xulrunner.exe";
+				if(bDebug)
+				{ 
+					var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_DEBUG');
+					debugSet.Command = val + "\\bin\\xulrunner.exe";
+				}else{
+					var val = wizard.FindSymbol('YU_XPCOM_SDK_PATH_RELEASE');
+					debugSet.Command = val + "\\bin\\xulrunner.exe";
+				}
+				
+				
 				debugSet.CommandArguments = "application.ini";
 				debugSet.WorkingDirectory = "..\\..\\bin\\";
 			}
