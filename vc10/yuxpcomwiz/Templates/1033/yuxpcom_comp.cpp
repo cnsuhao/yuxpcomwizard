@@ -76,36 +76,36 @@ NS_IMETHODIMP [!output YU_COMP_NAME]Component::Observe(nsISupports *aSubject, co
 	///// now we can set the xpcom network proxy
 	nsCOMPtr<nsIPrefService> prefs = do_GetService("@mozilla.org/preferences-service;1", &rv);
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_SERVICE_NOT_AVAILABLE;
 
 	nsCOMPtr< nsIPrefBranch > branch;
 	prefs->GetBranch( "network.proxy.", getter_AddRefs( branch) );
 
 	if( !branch )
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	// set proxy type
 	rv = branch->SetIntPref("type", 1);
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	// set https proxy
 	rv = branch->SetCharPref("ssl", "www.proxy.com" );
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	rv = branch->SetIntPref("ssl_port", 8080);
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	// set http proxy
 	branch->SetCharPref("http", "www.proxy.com" );
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	rv = branch->SetIntPref("http_port", 8080);
 	if( NS_FAILED( rv ))
-		return -1;
+		return NS_ERROR_NOT_IMPLEMENTED;
 
 	return NS_OK;
 }

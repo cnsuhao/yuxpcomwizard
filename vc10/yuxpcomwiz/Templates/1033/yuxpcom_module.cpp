@@ -11,7 +11,7 @@ nsresult [!output YU_COMP_NAME]LoadFuncPtr()
 	nsresult rv = NS_GetServiceManager(getter_AddRefs(servMan));
 
 	if (NS_FAILED(rv))
-		return -1;
+		return NS_ERROR_SERVICE_NOT_AVAILABLE;
 
 	nsCOMPtr< nsICategoryManager > catman;
 
@@ -20,7 +20,7 @@ nsresult [!output YU_COMP_NAME]LoadFuncPtr()
 		getter_AddRefs( catman ));
 
 	if (NS_FAILED(rv))
-		return -1;
+		return NS_ERROR_SERVICE_NOT_AVAILABLE;
 
 
 	return NS_OK;

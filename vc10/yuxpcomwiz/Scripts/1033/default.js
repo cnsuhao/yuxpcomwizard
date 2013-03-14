@@ -80,7 +80,6 @@ function CreateCustomProject(strProjectName, strProjectPath)
 				wizard.AddSymbol( "YU_FIRST_PROJECT", true );
 			}
 		}
-
 		
 		var strProjectNameWithExt = '';
 		strProjectNameWithExt = strProjectName + '.vcxproj';
@@ -186,7 +185,7 @@ function AddConfig(proj, strProjectName)
 			//CLTool.TreatWChar_tAsBuiltInType = false;
 			//CLTool.Detect64BitPortabilityProblems = true;
 			CLTool.WarningLevel = warningLevel_3;
-			CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;$(XPCOM_SDK)\\include"
+			CLTool.AdditionalIncludeDirectories = "..\\include;..\\interface;$(XPCOM_SDK)\\include;$(XPCOM_SDK)\\include\\nspr";
 			
 			//var forcedIncludes = "stdafx.h;";
 			//CLTool.ForcedIncludeFiles = forcedIncludes;
