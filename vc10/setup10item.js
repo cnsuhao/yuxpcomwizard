@@ -1,4 +1,4 @@
-// XPCOM Component Wiz  Ver 1.0
+// XPCOM Item Wiz  Ver 1.0
 // Copyright (C) shudingbo Corporation. All rights reserved.
 //
 // This file is a part of the yutools.
@@ -13,7 +13,7 @@
 function setupPlugin()
 {
 	// Decode command line arguments
-	var bDebug = false;
+	var bDebug = true;
 	var bElevated = false;
 	var Args = WScript.Arguments;
 	for(var i = 0; i < Args.length; i++)
@@ -54,7 +54,7 @@ function setupPlugin()
 	if(strValue == null || strValue == "")
 		strValue = ".";	
 	// Get data source path
-	var strSourceFolder = FileSys.BuildPath(strValue, "yuxpcomwiz");
+	var strSourceFolder = FileSys.BuildPath(strValue, "xpidlwizard");
 	if(bDebug)
 		WScript.Echo("Source: " + strSourceFolder);
 
@@ -83,7 +83,7 @@ function setupPlugin()
 		}
 	}
 
-	var strDestFolder = FileSys.BuildPath(strValue, "vcprojects");
+	var strDestFolder = FileSys.BuildPath(strValue, "vcprojectitems");
 	if(bDebug)
 		WScript.Echo("Destination: " + strDestFolder);
 	if(!FileSys.FolderExists(strDestFolder))
@@ -95,13 +95,13 @@ function setupPlugin()
 	// Copy files
 	try
 	{
-		// Create xpcom plugin wiz
-		var strSrc = FileSys.BuildPath(strSourceFolder, "xpcomComponentWizard.ico");
-		var strDest = FileSys.BuildPath(strDestFolder, "xpcomComponentWizard.ico");
+		// Create xpcom item wiz
+		var strSrc = FileSys.BuildPath(strSourceFolder, "xpidlWizard.ico");
+		var strDest = FileSys.BuildPath(strDestFolder, "xpidlWizard.ico");
 		FileSys.CopyFile(strSrc, strDest);
 
-		strSrc = FileSys.BuildPath(strSourceFolder, "xpcomComponentWizard.vsdir");
-		strDest = FileSys.BuildPath(strDestFolder, "xpcomComponentWizard.vsdir");
+		strSrc = FileSys.BuildPath(strSourceFolder, "xpidlWizard.vsdir");
+		strDest = FileSys.BuildPath(strDestFolder, "xpidlWizard.vsdir");
 		FileSys.CopyFile(strSrc, strDest);
 	}
 	catch(e)
@@ -113,11 +113,11 @@ function setupPlugin()
 		return;
 	}
 
-	// Read and write xpcomComponentWizard.vsz, add engine version and replace path when found
+	// Read and write xpidlWizard.vsz, add engine version and replace path when found
 	try
 	{
-		var strSrc = FileSys.BuildPath(strSourceFolder, "xpcomComponentWizard.vsz");
-		var strDest = FileSys.BuildPath(strDestFolder, "xpcomComponentWizard.vsz");
+		var strSrc = FileSys.BuildPath(strSourceFolder, "xpidlWizard.vsz");
+		var strDest = FileSys.BuildPath(strDestFolder, "xpidlWizard.vsz");
 
 		var ForReading = 1;
 		var fileSrc = FileSys.OpenTextFile(strSrc, ForReading);
@@ -164,26 +164,26 @@ function setupPlugin()
 	var strDestGRSFolder = "";
 	try
 	{
-		strDestGRSFolder = FileSys.BuildPath(strDestFolder, "yuXPCOMWiz");
+		strDestGRSFolder = FileSys.BuildPath(strDestFolder, "yuXPCOM");
 		if(!FileSys.FolderExists(strDestGRSFolder))
 			FileSys.CreateFolder(strDestGRSFolder);
 		if(bDebug)
-			WScript.Echo("yuXPCOMWiz Folder: " + strDestGRSFolder);
+			WScript.Echo("xpidl Wiz Folder: " + strDestGRSFolder);
 	}
 	catch(e)
 	{
 		var strError = "no info";
 		if(e.description.length != 0)
 			strError = e.description;
-		WScript.Echo("ERROR: Cannot create yuXPCOMWiz folder (" + strError + ")");
+		WScript.Echo("ERROR: Cannot create yuXPCOM folder (" + strError + ")");
 		return;
 	}
 
-	// Read and write additional xpcomComponentWizard.vsdir, add path to the wizard location
+	// Read and write additional xpidlWizard.vsdir, add path to the wizard location
 	try
 	{
-		var strSrc = FileSys.BuildPath(strSourceFolder, "xpcomComponentWizard.vsdir");
-		var strDest = FileSys.BuildPath(strDestGRSFolder, "xpcomComponentWizard.vsdir");
+		var strSrc = FileSys.BuildPath(strSourceFolder, "xpidlWizard.vsdir");
+		var strDest = FileSys.BuildPath(strDestGRSFolder, "xpidlWizard.vsdir");
 
 		var ForReading = 1;
 		var fileSrc = FileSys.OpenTextFile(strSrc, ForReading);
@@ -204,7 +204,7 @@ function setupPlugin()
 		while(!fileSrc.AtEndOfStream)
 		{
 			var strLine = fileSrc.ReadLine();
-			if(strLine.indexOf("xpcomComponentWizard.vsz|") != -1)
+			if(strLine.indexOf("xpidlWizard.vsz|") != -1)
 				strLine = "..\\" + strLine;
 			fileDest.WriteLine(strLine);
 		}
@@ -217,9 +217,9 @@ function setupPlugin()
 		var strError = "no info";
 		if(e.description.length != 0)
 			strError = e.description;
-		WScript.Echo("ERROR: Cannot read and write xpCOM\\xpcomComponentWizard.vsdir (" + strError + ")");
+		WScript.Echo("ERROR: Cannot read and write yuXPCOM\\xpidlWizard.vsdir (" + strError + ")");
 		return;
 	}
 
-	WScript.Echo("XPCOM Component Wizard install success! ");
+	WScript.Echo("XPCOM xpidl Wizard install success! ");
 }
