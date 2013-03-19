@@ -2,9 +2,11 @@
 
 <Job ID="Delete the template File">
 <script language="JSCript" src="setup10plugin.js" />
+<script language="JSCript" src="setup10item.js" />
 
 <script LANGUAGE="JSCript">
 	setupPlugin();
+	setupItem();
 </script>
 
 </Job>

@@ -4,4 +4,5 @@ Wizard=VsWizard.VsWizardEngine
 Param="WIZARD_NAME = XPCOMItem"
 Param="WIZARD_VERSION = 7.0"
 Param="ABSOLUTE_PATH = ."
+Param="WIZARD_UI = FALSE"
 Param="FALLBACK_LCID = 1033"

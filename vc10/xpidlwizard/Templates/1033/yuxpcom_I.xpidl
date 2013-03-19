@@ -1,0 +1,10 @@
+#include "nsISupports.idl"
+
+/**
+ * This interface using for ...
+*/
+ [scriptable, uuid([!output YU_INTERFACE_ID_IDL])]
+ interface [!output YU_INTERFACE_NAME] : nsISupports
+ {
+     long Sum(in long aFirst, in long aSecond);
+ };

@@ -24,22 +24,6 @@ function OnFinish(selProj, selObj)
 		
 		selProj = CreateCustomProject(strProjectName, strProjectPath);
 		strProjectPath = wizard.FindSymbol('PROJECT_PATH');
-		
-/*
-		var strSolutionPath = "";
-		
-		strSolutionName = wizard.FindSymbol("VS_SOLUTION_NAME");
-		if (strSolutionName.length)
-		{
-			strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
-			strProjectPath = strSolutionPath + "src\\" + strProjectName;
-		}
-		
-		wizard.AddSymbol( "YU_DIR_BIN", strSolutionPath + "bin\\" );	
-		wizard.AddSymbol( "YU_DIR_DOC", strSolutionPath + "doc\\" );
-		wizard.AddSymbol( "YU_DIR_SRC_INC", strSolutionPath + "src\\include\\" );
-		wizard.AddSymbol( "YU_DIR_SRC_INT", strSolutionPath + "src\\interface\\" );
-		*/
 
 		///////////////
 		selProj.Object.Keyword = "xpcomWizProj";
@@ -52,10 +36,6 @@ function OnFinish(selProj, selObj)
 		var InfFile = CreateCustomInfFile();
 		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
 		InfFile.Delete();
-
-		//fso = new ActiveXObject('Scripting.FileSystemObject');
-		//wizard.YesNoAlert(oldProjFolder);
-		//fso.DeleteFolder(oldProjFolder);
 
 		//////////////////////
 		selProj.Object.Save();		
@@ -385,9 +365,6 @@ function GetTargetName(strName, strProjectName)
 			var strInterfaceName = wizard.FindSymbol('YU_INTERFACE_NAME');
 			strTarget = "..\\interface\\" + strInterfaceName + ".xpidl";
 		}
-		//else if( strName == "gentypedef.bat" ) {
-		//	strTarget = "..\\interface\\" + strName;
-		//}
 		else if( strName == "buildxpidl.bat" ) {
 			strTarget = "..\\interface\\" + strName;
 		}		
@@ -640,7 +617,15 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 								CBTool.Description = "Create header File and xpt File...";
 								CBTool.Outputs = "../include/" + interName + ".h";						
 							}						
-						}					
+						}
+
+						var fiInter = proj.Object.Filters.Item('Interface Files');
+						var fileH = "../include/" + interName + ".h";
+						fiInter.AddFile(fileH);
+						
+						var fiXPT = proj.Object.Filters.Item('components');
+						fileH = "../../bin/components/"+ interName + ".xpt";
+						fiXPT.AddFile(fileH);
 					}
 				}
 			}

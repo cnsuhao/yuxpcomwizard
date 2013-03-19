@@ -10,10 +10,10 @@
 // any other, from this software.
 
 // Setup program for the XPCOM Component Wizard for VC++ 10.0 (shudingbo)
-function setupPlugin()
+function setupItem()
 {
 	// Decode command line arguments
-	var bDebug = true;
+	var bDebug = false;
 	var bElevated = false;
 	var Args = WScript.Arguments;
 	for(var i = 0; i < Args.length; i++)
